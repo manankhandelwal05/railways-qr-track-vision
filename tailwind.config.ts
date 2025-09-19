@@ -19,6 +19,26 @@ export default {
         ring: "hsl(var(--ring))",
         background: "hsl(var(--background))",
         foreground: "hsl(var(--foreground))",
+        
+        // Government theme colors
+        "gov-blue": {
+          DEFAULT: "hsl(var(--gov-blue))",
+          dark: "hsl(var(--gov-blue-dark))",
+          light: "hsl(var(--gov-blue-light))",
+          foreground: "hsl(var(--gov-blue-foreground))",
+        },
+        "railway-red": {
+          DEFAULT: "hsl(var(--railway-red))",
+          dark: "hsl(var(--railway-red-dark))",
+          light: "hsl(var(--railway-red-light))",
+          foreground: "hsl(var(--railway-red-foreground))",
+        },
+        "gov-gold": {
+          DEFAULT: "hsl(var(--gov-gold))",
+          light: "hsl(var(--gov-gold-light))",
+          foreground: "hsl(var(--gov-gold-foreground))",
+        },
+        
         primary: {
           DEFAULT: "hsl(var(--primary))",
           foreground: "hsl(var(--primary-foreground))",
