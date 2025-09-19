@@ -3,7 +3,9 @@ import { Layout } from '@/components/Layout';
 import { Card, CardContent, CardHeader, CardTitle } from '@/components/ui/card';
 import { Button } from '@/components/ui/button';
 import { Badge } from '@/components/ui/badge';
-import { Users, Building, Settings, Shield, BarChart3, Database, AlertTriangle, TrendingUp } from 'lucide-react';
+import { useAuth } from '@/contexts/AuthContext';
+import { Link } from 'react-router-dom';
+import { Users, Building, Settings, Shield, BarChart3, Database, AlertTriangle, TrendingUp, Plus } from 'lucide-react';
 const mockSystemStats = {
   totalVendors: 24,
   activeVendors: 18,
@@ -52,13 +54,30 @@ const mockSystemAlerts = [{
   timestamp: '2024-01-18T12:15:00'
 }];
 const AdminDashboard: React.FC = () => {
+  const { user, signOut } = useAuth();
+
+  const handleLogout = async () => {
+    await signOut();
+  };
+
   return <Layout>
       <div className="p-6">
-        <div className="mb-6">
-          <h1 className="text-3xl font-bold text-gov-blue mb-2">Admin Dashboard</h1>
-          <p className="text-muted-foreground">
-            System administration, vendor management, and integration oversight
-          </p>
+        <div className="flex justify-between items-center mb-6">
+          <div>
+            <h1 className="text-3xl font-bold text-gov-blue mb-2">Admin Dashboard</h1>
+            <p className="text-muted-foreground">Welcome, {user?.name}</p>
+          </div>
+          <div className="flex gap-2">
+            <Button asChild>
+              <Link to="/admin/users">
+                <Plus className="h-4 w-4 mr-2" />
+                Manage Users
+              </Link>
+            </Button>
+            <Button onClick={handleLogout} variant="outline">
+              Logout
+            </Button>
+          </div>
         </div>
 
         {/* System Overview KPIs */}

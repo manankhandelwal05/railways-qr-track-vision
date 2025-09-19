@@ -1,52 +1,72 @@
-import React, { useState } from 'react';
+import React, { useState, useEffect } from 'react';
 import { Link, useNavigate } from 'react-router-dom';
 import { Layout } from '@/components/Layout';
 import { Card, CardContent, CardDescription, CardHeader, CardTitle } from '@/components/ui/card';
 import { Button } from '@/components/ui/button';
 import { Input } from '@/components/ui/input';
 import { Label } from '@/components/ui/label';
-import { Select, SelectContent, SelectItem, SelectTrigger, SelectValue } from '@/components/ui/select';
-import { useAuth, UserRole } from '@/contexts/AuthContext';
+import { useAuth } from '@/contexts/AuthContext';
 import { useToast } from '@/hooks/use-toast';
 
 const LoginPage: React.FC = () => {
-  const [role, setRole] = useState<UserRole>('admin');
-  const [username, setUsername] = useState('');
+  const [email, setEmail] = useState('');
   const [password, setPassword] = useState('');
-  const { login } = useAuth();
+  const [isLoading, setIsLoading] = useState(false);
+  const { signIn, user, loading } = useAuth();
   const navigate = useNavigate();
   const { toast } = useToast();
 
-  const handleLogin = (e: React.FormEvent) => {
+  useEffect(() => {
+    if (user && !loading) {
+      // Redirect based on user role
+      const dashboardRoute = getDashboardRoute(user.role);
+      navigate(dashboardRoute);
+    }
+  }, [user, loading, navigate]);
+
+  const getDashboardRoute = (role: string) => {
+    switch (role) {
+      case 'admin':
+        return '/dashboard/admin';
+      case 'staff':
+        return '/dashboard/staff';
+      case 'inspector':
+        return '/dashboard/inspector';
+      case 'user':
+        return '/dashboard/user';
+      default:
+        return '/dashboard/user';
+    }
+  };
+
+  const handleLogin = async (e: React.FormEvent) => {
     e.preventDefault();
     
-    if (!username || !password) {
+    if (!email || !password) {
       toast({
         title: "Error",
-        description: "Please enter both username and password",
+        description: "Please enter both email and password",
         variant: "destructive"
       });
       return;
     }
 
-    // Mock user data
-    const userData = {
-      id: '1',
-      name: username,
-      email: `${username}@railways.gov.in`,
-      role,
-      organization: 'Indian Railways'
-    };
-
-    login(userData);
+    setIsLoading(true);
+    const { error } = await signIn(email, password);
     
-    toast({
-      title: "Login Successful",
-      description: `Welcome, ${username}!`
-    });
-
-    // Redirect to role-specific dashboard
-    navigate(`/dashboard/${role}`);
+    if (error) {
+      toast({
+        title: "Login Failed",
+        description: error.message,
+        variant: "destructive"
+      });
+      setIsLoading(false);
+    } else {
+      toast({
+        title: "Login Successful",
+        description: "Welcome back!"
+      });
+    }
   };
 
   return (
@@ -62,29 +82,14 @@ const LoginPage: React.FC = () => {
           <CardContent>
             <form onSubmit={handleLogin} className="space-y-4">
               <div className="space-y-2">
-                <Label htmlFor="role">Select Role</Label>
-                <Select value={role} onValueChange={(value: UserRole) => setRole(value)}>
-                  <SelectTrigger>
-                    <SelectValue />
-                  </SelectTrigger>
-                  <SelectContent>
-                    <SelectItem value="admin">Admin</SelectItem>
-                    <SelectItem value="vendor">Vendor</SelectItem>
-                    <SelectItem value="depot-officer">Depot Officer</SelectItem>
-                    <SelectItem value="inspector">Inspector</SelectItem>
-                    <SelectItem value="field-engineer">Field Engineer</SelectItem>
-                  </SelectContent>
-                </Select>
-              </div>
-
-              <div className="space-y-2">
-                <Label htmlFor="username">Username</Label>
+                <Label htmlFor="email">Email</Label>
                 <Input
-                  id="username"
-                  type="text"
-                  value={username}
-                  onChange={(e) => setUsername(e.target.value)}
-                  placeholder="Enter your username"
+                  id="email"
+                  type="email"
+                  value={email}
+                  onChange={(e) => setEmail(e.target.value)}
+                  placeholder="Enter your email"
+                  disabled={isLoading}
                 />
               </div>
 
@@ -96,11 +101,12 @@ const LoginPage: React.FC = () => {
                   value={password}
                   onChange={(e) => setPassword(e.target.value)}
                   placeholder="Enter your password"
+                  disabled={isLoading}
                 />
               </div>
 
-              <Button type="submit" className="w-full">
-                Secure Login
+              <Button type="submit" className="w-full" disabled={isLoading}>
+                {isLoading ? 'Signing in...' : 'Secure Login'}
               </Button>
 
               <div className="text-center text-sm">

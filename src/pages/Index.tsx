@@ -1,13 +1,50 @@
-import React from 'react';
+import React, { useEffect } from 'react';
+import { useNavigate, Link } from 'react-router-dom';
 import { Layout } from '@/components/Layout';
 import { HeroBanner } from '@/components/HeroBanner';
 import { Card, CardContent, CardHeader, CardTitle } from '@/components/ui/card';
 import { Button } from '@/components/ui/button';
+import { useAuth } from '@/contexts/AuthContext';
 import { ArrowRight, Users, Package, QrCode, Shield } from 'lucide-react';
 import railwayFittings from '@/assets/railway-fittings.jpg';
 import railwayMaintenance from '@/assets/railway-maintenance.jpg';
 
 const Index = () => {
+  const { user, loading } = useAuth();
+  const navigate = useNavigate();
+
+  useEffect(() => {
+    if (user && !loading) {
+      // Redirect authenticated users to their dashboard
+      const dashboardRoute = getDashboardRoute(user.role);
+      navigate(dashboardRoute);
+    }
+  }, [user, loading, navigate]);
+
+  const getDashboardRoute = (role: string) => {
+    switch (role) {
+      case 'admin':
+        return '/dashboard/admin';
+      case 'staff':
+        return '/dashboard/staff';
+      case 'inspector':
+        return '/dashboard/inspector';
+      case 'user':
+        return '/dashboard/user';
+      default:
+        return '/dashboard/user';
+    }
+  };
+
+  if (loading) {
+    return (
+      <Layout>
+        <div className="flex items-center justify-center min-h-screen">
+          <div className="text-lg">Loading...</div>
+        </div>
+      </Layout>
+    );
+  }
   const keyFeatures = [
     {
       icon: QrCode,
@@ -95,9 +132,11 @@ const Index = () => {
               Join the Indian Railways QR-based Fittings Identification System today
             </p>
             <div className="flex justify-center gap-4">
-              <Button variant="secondary" size="lg">Sign Up Now</Button>
-              <Button variant="outline" size="lg" className="border-white text-white hover:bg-white hover:text-gov-blue">
-                Login
+              <Button variant="secondary" size="lg" asChild>
+                <Link to="/signup">Sign Up Now</Link>
+              </Button>
+              <Button variant="outline" size="lg" className="border-white text-white hover:bg-white hover:text-gov-blue" asChild>
+                <Link to="/login">Login</Link>
               </Button>
             </div>
           </CardContent>

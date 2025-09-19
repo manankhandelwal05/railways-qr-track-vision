@@ -4,6 +4,7 @@ import { TooltipProvider } from "@/components/ui/tooltip";
 import { QueryClient, QueryClientProvider } from "@tanstack/react-query";
 import { BrowserRouter, Routes, Route } from "react-router-dom";
 import { AuthProvider } from "./contexts/AuthContext";
+import ProtectedRoute from "./components/ProtectedRoute";
 import Index from "./pages/Index";
 import LoginPage from "./pages/LoginPage";
 import SignUpPage from "./pages/SignUpPage";
@@ -17,11 +18,14 @@ import SearchInventoryPage from "./pages/SearchInventoryPage";
 import InspectionReportsPage from "./pages/InspectionReportsPage";
 import QRScanRecordsPage from "./pages/QRScanRecordsPage";
 import WarrantyExpiryPage from "./pages/WarrantyExpiryPage";
+import AdminUserManagement from "./pages/AdminUserManagement";
 import VendorDashboard from "./pages/dashboards/VendorDashboard";
 import DepotOfficerDashboard from "./pages/dashboards/DepotOfficerDashboard";
 import InspectorDashboard from "./pages/dashboards/InspectorDashboard";
 import FieldEngineerDashboard from "./pages/dashboards/FieldEngineerDashboard";
 import AdminDashboard from "./pages/dashboards/AdminDashboard";
+import StaffDashboard from "./pages/dashboards/StaffDashboard";
+import UserDashboard from "./pages/dashboards/UserDashboard";
 import NotFound from "./pages/NotFound";
 
 const queryClient = new QueryClient();
@@ -47,11 +51,41 @@ const App = () => (
             <Route path="/inspection-reports" element={<InspectionReportsPage />} />
             <Route path="/qr-scan-records" element={<QRScanRecordsPage />} />
             <Route path="/warranty-expiry" element={<WarrantyExpiryPage />} />
+            
+            {/* Protected Admin Routes */}
+            <Route path="/admin/users" element={
+              <ProtectedRoute requiredRole="admin">
+                <AdminUserManagement />
+              </ProtectedRoute>
+            } />
+            
+            {/* Protected Dashboard Routes */}
+            <Route path="/dashboard/admin" element={
+              <ProtectedRoute requiredRole="admin">
+                <AdminDashboard />
+              </ProtectedRoute>
+            } />
+            <Route path="/dashboard/staff" element={
+              <ProtectedRoute requiredRole="staff">
+                <StaffDashboard />
+              </ProtectedRoute>
+            } />
+            <Route path="/dashboard/inspector" element={
+              <ProtectedRoute requiredRole="inspector">
+                <InspectorDashboard />
+              </ProtectedRoute>
+            } />
+            <Route path="/dashboard/user" element={
+              <ProtectedRoute requiredRole="user">
+                <UserDashboard />
+              </ProtectedRoute>
+            } />
+            
+            {/* Legacy dashboard routes - keeping for backward compatibility */}
             <Route path="/dashboard/vendor" element={<VendorDashboard />} />
             <Route path="/dashboard/depot-officer" element={<DepotOfficerDashboard />} />
-            <Route path="/dashboard/inspector" element={<InspectorDashboard />} />
             <Route path="/dashboard/field-engineer" element={<FieldEngineerDashboard />} />
-            <Route path="/dashboard/admin" element={<AdminDashboard />} />
+            
             {/* ADD ALL CUSTOM ROUTES ABOVE THE CATCH-ALL "*" ROUTE */}
             <Route path="*" element={<NotFound />} />
           </Routes>

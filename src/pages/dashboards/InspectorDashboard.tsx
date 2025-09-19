@@ -3,6 +3,7 @@ import { Layout } from '@/components/Layout';
 import { Card, CardContent, CardHeader, CardTitle } from '@/components/ui/card';
 import { Button } from '@/components/ui/button';
 import { Badge } from '@/components/ui/badge';
+import { useAuth } from '@/contexts/AuthContext';
 import { FileText, AlertTriangle, BarChart3, CheckCircle, Clock, TrendingUp, TrendingDown } from 'lucide-react';
 
 const mockInspectionStats = {
@@ -43,14 +44,23 @@ const mockDefectTrends = [
 ];
 
 const InspectorDashboard: React.FC = () => {
+  const { user, signOut } = useAuth();
+
+  const handleLogout = async () => {
+    await signOut();
+  };
+
   return (
     <Layout>
       <div className="p-6">
-        <div className="mb-6">
-          <h1 className="text-3xl font-bold text-gov-blue mb-2">Inspector Dashboard</h1>
-          <p className="text-muted-foreground">
-            Manage inspections, track NCRs, and monitor quality trends
-          </p>
+        <div className="flex justify-between items-center mb-6">
+          <div>
+            <h1 className="text-3xl font-bold text-gov-blue mb-2">Inspector Dashboard</h1>
+            <p className="text-muted-foreground">Welcome, {user?.name}</p>
+          </div>
+          <Button onClick={handleLogout} variant="outline">
+            Logout
+          </Button>
         </div>
 
         {/* Key Metrics */}
