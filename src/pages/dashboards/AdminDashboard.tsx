@@ -4,7 +4,6 @@ import { Card, CardContent, CardHeader, CardTitle } from '@/components/ui/card';
 import { Button } from '@/components/ui/button';
 import { Badge } from '@/components/ui/badge';
 import { Users, Building, Settings, Shield, BarChart3, Database, AlertTriangle, TrendingUp } from 'lucide-react';
-
 const mockSystemStats = {
   totalVendors: 24,
   activeVendors: 18,
@@ -15,38 +14,45 @@ const mockSystemStats = {
   systemUptime: 99.8,
   dataIntegrity: 99.9
 };
-
-const mockVendorPerformance = [
-  { name: 'Steel Rail Components Pvt Ltd', performance: 96.8, trend: 'up', totalOrders: 45 },
-  { name: 'QR Tech Solutions India', performance: 99.2, trend: 'stable', totalOrders: 28 },
-  { name: 'Concrete Sleepers Manufacturing Co', performance: 94.5, trend: 'down', totalOrders: 67 },
-  { name: 'Railway Safety Systems Ltd', performance: 97.1, trend: 'up', totalOrders: 33 }
-];
-
-const mockSystemAlerts = [
-  {
-    type: 'Integration Warning',
-    message: 'UDM API sync delayed by 15 minutes',
-    severity: 'Medium',
-    timestamp: '2024-01-18T14:30:00'
-  },
-  {
-    type: 'User Activity',
-    message: 'Unusually high login attempts detected',
-    severity: 'High',
-    timestamp: '2024-01-18T13:45:00'
-  },
-  {
-    type: 'Data Quality',
-    message: '3 QR codes failed validation checks',
-    severity: 'Low',
-    timestamp: '2024-01-18T12:15:00'
-  }
-];
-
+const mockVendorPerformance = [{
+  name: 'Steel Rail Components Pvt Ltd',
+  performance: 96.8,
+  trend: 'up',
+  totalOrders: 45
+}, {
+  name: 'QR Tech Solutions India',
+  performance: 99.2,
+  trend: 'stable',
+  totalOrders: 28
+}, {
+  name: 'Concrete Sleepers Manufacturing Co',
+  performance: 94.5,
+  trend: 'down',
+  totalOrders: 67
+}, {
+  name: 'Railway Safety Systems Ltd',
+  performance: 97.1,
+  trend: 'up',
+  totalOrders: 33
+}];
+const mockSystemAlerts = [{
+  type: 'Integration Warning',
+  message: 'UDM API sync delayed by 15 minutes',
+  severity: 'Medium',
+  timestamp: '2024-01-18T14:30:00'
+}, {
+  type: 'User Activity',
+  message: 'Unusually high login attempts detected',
+  severity: 'High',
+  timestamp: '2024-01-18T13:45:00'
+}, {
+  type: 'Data Quality',
+  message: '3 QR codes failed validation checks',
+  severity: 'Low',
+  timestamp: '2024-01-18T12:15:00'
+}];
 const AdminDashboard: React.FC = () => {
-  return (
-    <Layout>
+  return <Layout>
       <div className="p-6">
         <div className="mb-6">
           <h1 className="text-3xl font-bold text-gov-blue mb-2">Admin Dashboard</h1>
@@ -126,47 +132,19 @@ const AdminDashboard: React.FC = () => {
         {/* Quick Actions */}
         <div className="grid grid-cols-1 md:grid-cols-4 gap-4 mb-6">
           <Card className="hover:shadow-lg transition-shadow cursor-pointer">
-            <CardContent className="p-6 text-center">
-              <Building className="h-12 w-12 mx-auto mb-4 text-gov-blue" />
-              <h3 className="text-lg font-semibold mb-2">Vendor Management</h3>
-              <p className="text-sm text-muted-foreground mb-4">
-                Manage vendor registrations and approvals
-              </p>
-              <Button className="w-full">Manage Vendors</Button>
-            </CardContent>
+            
           </Card>
 
           <Card className="hover:shadow-lg transition-shadow cursor-pointer">
-            <CardContent className="p-6 text-center">
-              <Users className="h-12 w-12 mx-auto mb-4 text-gov-blue" />
-              <h3 className="text-lg font-semibold mb-2">User Management</h3>
-              <p className="text-sm text-muted-foreground mb-4">
-                Manage user accounts and permissions
-              </p>
-              <Button variant="outline" className="w-full">Manage Users</Button>
-            </CardContent>
+            
           </Card>
 
           <Card className="hover:shadow-lg transition-shadow cursor-pointer">
-            <CardContent className="p-6 text-center">
-              <Settings className="h-12 w-12 mx-auto mb-4 text-gov-blue" />
-              <h3 className="text-lg font-semibold mb-2">System Integration</h3>
-              <p className="text-sm text-muted-foreground mb-4">
-                Configure UDM and TMS integrations
-              </p>
-              <Button variant="outline" className="w-full">Configure</Button>
-            </CardContent>
+            
           </Card>
 
           <Card className="hover:shadow-lg transition-shadow cursor-pointer">
-            <CardContent className="p-6 text-center">
-              <Shield className="h-12 w-12 mx-auto mb-4 text-gov-blue" />
-              <h3 className="text-lg font-semibold mb-2">Audit Logs</h3>
-              <p className="text-sm text-muted-foreground mb-4">
-                View system audit trails and logs
-              </p>
-              <Button variant="outline" className="w-full">View Logs</Button>
-            </CardContent>
+            
           </Card>
         </div>
 
@@ -181,8 +159,7 @@ const AdminDashboard: React.FC = () => {
             </CardHeader>
             <CardContent>
               <div className="space-y-4">
-                {mockVendorPerformance.map((vendor, index) => (
-                  <div key={index} className="p-4 border rounded-lg">
+                {mockVendorPerformance.map((vendor, index) => <div key={index} className="p-4 border rounded-lg">
                     <div className="flex items-start justify-between mb-2">
                       <h4 className="font-medium text-sm">{vendor.name}</h4>
                       <div className="flex items-center gap-2">
@@ -197,24 +174,16 @@ const AdminDashboard: React.FC = () => {
                     <div className="flex items-center justify-between">
                       <div className="flex-1">
                         <div className="w-full bg-gray-200 rounded-full h-2 mr-4">
-                          <div 
-                            className={`h-2 rounded-full ${
-                              vendor.performance >= 98 ? 'bg-green-500' :
-                              vendor.performance >= 95 ? 'bg-yellow-500' : 'bg-red-500'
-                            }`}
-                            style={{ width: `${vendor.performance}%` }}
-                          ></div>
+                          <div className={`h-2 rounded-full ${vendor.performance >= 98 ? 'bg-green-500' : vendor.performance >= 95 ? 'bg-yellow-500' : 'bg-red-500'}`} style={{
+                        width: `${vendor.performance}%`
+                      }}></div>
                         </div>
                       </div>
-                      <span className={`font-bold text-sm ${
-                        vendor.performance >= 98 ? 'text-green-600' :
-                        vendor.performance >= 95 ? 'text-yellow-600' : 'text-red-600'
-                      }`}>
+                      <span className={`font-bold text-sm ${vendor.performance >= 98 ? 'text-green-600' : vendor.performance >= 95 ? 'text-yellow-600' : 'text-red-600'}`}>
                         {vendor.performance}%
                       </span>
                     </div>
-                  </div>
-                ))}
+                  </div>)}
               </div>
             </CardContent>
           </Card>
@@ -229,18 +198,9 @@ const AdminDashboard: React.FC = () => {
             </CardHeader>
             <CardContent>
               <div className="space-y-4">
-                {mockSystemAlerts.map((alert, index) => (
-                  <div key={index} className={`p-4 border rounded-lg ${
-                    alert.severity === 'High' ? 'border-red-200 bg-red-50' :
-                    alert.severity === 'Medium' ? 'border-yellow-200 bg-yellow-50' : 'border-blue-200 bg-blue-50'
-                  }`}>
+                {mockSystemAlerts.map((alert, index) => <div key={index} className={`p-4 border rounded-lg ${alert.severity === 'High' ? 'border-red-200 bg-red-50' : alert.severity === 'Medium' ? 'border-yellow-200 bg-yellow-50' : 'border-blue-200 bg-blue-50'}`}>
                     <div className="flex items-start justify-between mb-2">
-                      <Badge variant={
-                        alert.severity === 'High' ? 'destructive' :
-                        alert.severity === 'Medium' ? 'default' : 'secondary'
-                      } className={
-                        alert.severity === 'Medium' ? 'bg-yellow-500' : ''
-                      }>
+                      <Badge variant={alert.severity === 'High' ? 'destructive' : alert.severity === 'Medium' ? 'default' : 'secondary'} className={alert.severity === 'Medium' ? 'bg-yellow-500' : ''}>
                         {alert.severity}
                       </Badge>
                       <span className="text-xs text-muted-foreground">{alert.type}</span>
@@ -254,8 +214,7 @@ const AdminDashboard: React.FC = () => {
                         Investigate
                       </Button>
                     </div>
-                  </div>
-                ))}
+                  </div>)}
               </div>
 
               <div className="mt-6 p-4 bg-gov-blue/5 rounded-lg">
@@ -278,8 +237,6 @@ const AdminDashboard: React.FC = () => {
           </Card>
         </div>
       </div>
-    </Layout>
-  );
+    </Layout>;
 };
-
 export default AdminDashboard;
